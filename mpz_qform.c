@@ -206,7 +206,7 @@ int mpz_qform_split_ambiguous(mpz_qform_group_t* group, mpz_t out_d, const mpz_t
  */
 int mpz_qform_is_primeform(mpz_qform_group_t* group, mpz_qform_t* form, int p) {
   int Dmodp;
-  const short* sqrtp;
+  const int* sqrtp;
   
   if (p > sqrtmodp_maxp)
     return 0; // p is too large for the table

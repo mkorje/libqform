@@ -120,7 +120,7 @@ int s64_qform_is_primeform(s64_qform_group_t* group,
 			   s64_qform_t* form,
 			   const int p) {
   int Dmodp;
-  const short* sqrtp;
+  const int* sqrtp;
   
   if (p > sqrtmodp_maxp)
     return 0; // p is too large for the table
