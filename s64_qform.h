@@ -31,6 +31,8 @@ typedef struct {
   int64_t D;
   uint32_t S; // square root of delta
   uint32_t L; // 4th root of delta
+
+  int32_t conductor_ell;
 } s64_qform_group_t;
 
 void s64_qform_group_init(s64_qform_group_t* group);

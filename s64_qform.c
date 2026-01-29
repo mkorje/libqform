@@ -68,6 +68,8 @@ void s64_qform_group_init(s64_qform_group_t* group) {
 
   group->desc.pow_rep_sizes = s64_pow_rep_sizes;
   group->desc.pow_reps = s64_pow_reps;
+
+  group->conductor_ell = 0;
 }
 
 static inline int32_t avg_s32(const int32_t a, const int32_t b) {
@@ -298,6 +300,33 @@ void s64_qform_reduce(s64_qform_group_t* group, s64_qform_t* form) {
   }
 }
 
+// Helper: Rotates a form to ensure 'a' is coprime to ell.
+// This is necessary because NUCOMP fails if gcd(a, ell) > 1.
+static void s64_qform_sanitize(s64_qform_t* out, const s64_qform_t* in, int32_t ell) {
+  // If ell is not set or form is already safe, just copy
+  if (ell == 0 || (in->a % ell != 0)) {
+    *out = *in;
+    return;
+  }
+
+  // Case 1: 'a' is bad. Try swapping to (c, -b, a).
+  // This corresponds to the matrix [0 1; -1 0]
+  if (in->c % ell != 0) {
+    out->a = (int32_t) in->c; // safe because c was checked
+    out->b = -in->b;
+    out->c = in->a;
+    return;
+  }
+
+  // Case 2: Both 'a' and 'c' are bad.
+  // Since form is primitive, 'b' must be coprime to ell.
+  // Apply matrix [1 0; 1 1]. New a' = a + b + c.
+  // a + b + c = 0 + non_0 + 0 != 0 (mod ell).
+  out->a = in->a + in->b + (int32_t)in->c;
+  out->b = in->b + 2 * (int32_t)in->c;
+  out->c = in->c;
+}
+
 /**
  * NUCOMP algorithm. Adapted from "Solving the Pell Equation"
  * by Michael J. Jacobson, Jr. and Hugh C. Williams.
@@ -307,6 +336,14 @@ void s64_qform_compose(s64_qform_group_t* group,
 		       s64_qform_t* C,
 		       const s64_qform_t* A,
 		       const s64_qform_t* B) {
+
+  s64_qform_t safe_A, safe_B;
+  s64_qform_sanitize(&safe_A, A, group->conductor_ell);
+  s64_qform_sanitize(&safe_B, B, group->conductor_ell);
+  // Update pointers to use the safe versions
+  A = &safe_A;
+  B = &safe_B;
+  
   int32_t a1, a2, b1, b2;
   int64_t c2;
   int32_t g, s, x, y, z;
@@ -400,6 +437,10 @@ void s64_qform_compose(s64_qform_group_t* group,
  * NUDPL. Simplified from compose above.
  */
 void s64_qform_square(s64_qform_group_t* group, s64_qform_t* C, const s64_qform_t* A) {
+  s64_qform_t safe_A;
+  s64_qform_sanitize(&safe_A, A, group->conductor_ell);
+  A = &safe_A;
+  
   int32_t a1, b1;
   int64_t c1;
   int32_t s, y;
@@ -462,6 +503,10 @@ void s64_qform_square(s64_qform_group_t* group, s64_qform_t* C, const s64_qform_
  */
 void s64_qform_cube(s64_qform_group_t* group,
 		    s64_qform_t* R, const s64_qform_t* A) {
+  s64_qform_t safe_A;
+  s64_qform_sanitize(&safe_A, A, group->conductor_ell);
+  A = &safe_A;
+  
   int32_t S;
   int32_t v1;
   int32_t N;
