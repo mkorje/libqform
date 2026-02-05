@@ -965,6 +965,15 @@ static void s128_qform_genuine_cube(s128_qform_group_t* group,
       v2 = get_s64_from_s128(&v2_128);
     }
     
+    // NUCUBE can fail for non-fundamental discriminants.
+    if (a1 % S != 0) {
+      // Fall back to square-and-multiply: A^3 = A^2 * A.
+      s128_qform_t tmp;
+      s128_qform_square(group, &tmp, A);
+      s128_qform_compose(group, R, &tmp, A);
+      return;
+    }
+    
     // N = a/S
     N = a1 / S;
     

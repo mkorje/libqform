@@ -539,6 +539,16 @@ void s64_qform_cube(s64_qform_group_t* group,
       S = xgcd_s64(&u2_64, &v2_64, temp, temp2);
       v2 = v2_64;
     }
+    
+    // NUCUBE can fail for non-fundamental discriminants.
+    if (a1 % S != 0) {
+      // Fall back to square-and-multiply: A^3 = A^2 * A.
+      s64_qform_t tmp;
+      s64_qform_square(group, &tmp, A);
+      s64_qform_compose(group, R, &tmp, A);
+      return;
+    }
+    
     // N = a/S
     N = a1 / S;
     // L = N a
