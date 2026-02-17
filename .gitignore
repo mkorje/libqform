@@ -16,3 +16,10 @@
 
 # SCons
 .sconsign.dblite
+
+# Nix
+.direnv
+result
+
+# Rust
+target/

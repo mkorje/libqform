@@ -1,0 +1,48 @@
+{
+  "nodes": {
+    "liboptarith": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1771305676,
+        "narHash": "sha256-1PhlAadKaAJme02i3BzwaivVX/YZgPBvhJk6UKfTuFw=",
+        "owner": "mkorje",
+        "repo": "liboptarith",
+        "rev": "bd3ae05e5c86bffd07b904356fae3386510354f2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mkorje",
+        "repo": "liboptarith",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1771008912,
+        "narHash": "sha256-gf2AmWVTs8lEq7z/3ZAsgnZDhWIckkb+ZnAo5RzSxJg=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "a82ccc39b39b621151d6732718e3e250109076fa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "liboptarith": "liboptarith",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

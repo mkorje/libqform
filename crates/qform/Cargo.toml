@@ -1,0 +1,19 @@
+[package]
+name = "qform"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+description = "Safe Rust wrappers for libqform"
+
+[features]
+default = ["gmp"]
+gmp = ["dep:gmp-mpfr-sys", "qform-sys/gmp", "optarith/gmp"]
+
+[dependencies]
+qform-sys = { workspace = true }
+optarith = { workspace = true }
+gmp-mpfr-sys = { workspace = true, optional = true }
+
+[lib]
+name = "qform"
+path = "src/lib.rs"

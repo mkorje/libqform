@@ -1,0 +1,26 @@
+[package]
+name = "qform-sys"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+links = "qform_c"
+build = "build.rs"
+description = "Raw FFI bindings and bundled C build for libqform"
+publish = false
+
+[features]
+default = ["gmp"]
+gmp = []
+
+[lib]
+name = "qform_sys"
+path = "src/lib.rs"
+
+[dependencies]
+optarith-sys = { workspace = true }
+gmp-mpfr-sys = { workspace = true }
+
+[build-dependencies]
+bindgen = { workspace = true }
+optarith-sys = { workspace = true }
+gmp-mpfr-sys = { workspace = true }
